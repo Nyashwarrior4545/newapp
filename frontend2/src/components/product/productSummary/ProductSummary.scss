@@ -1,0 +1,56 @@
+.product-summary {
+  width: 100%;
+  .info-summary {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.card {
+  border: 1px solid #ccc;
+  // border-bottom: 3px solid var(--light-blue);
+  padding: 5px;
+  background-color: #f5f6fa;
+}
+
+.card1 {
+  background-color: #b624ff;
+}
+.card2 {
+  background-color: #32963d;
+}
+.card3 {
+  background-color: #c41849;
+}
+.card4 {
+  background-color: #03a5fc;
+}
+
+.InfoBox {
+  width: auto; // adjust the width of the InfoBox component
+  max-width: none; // remove any max-width
+}
+
+.card5 {
+  width: auto; // adjust the width of the card5 class
+  max-width: none; // remove any max-width
+}
+.card-red {
+  background-color: rgb(203, 47, 47);
+}
+
+.card-blue {
+  background-color: rgb(50, 50, 213);
+}
+
+.card-yellow {
+  background-color: rgb(199, 210, 53);
+}
+
+.card-pink {
+  background-color: rgb(196, 60, 83);
+}
+
+.card-green {
+  background-color: rgb(144, 17, 103);
+}
