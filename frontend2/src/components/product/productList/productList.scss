@@ -9,6 +9,19 @@
       width: 100%;
       max-width: 300px;
     }
+    .sort{
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background-color: rgb(231, 232, 233);
+      cursor: pointer;
+
+    }
+
+    .sort:hover {
+      background-color: rgb(45, 189, 255);
+      color: white;
+    }
 
     table {
       border-collapse: collapse;

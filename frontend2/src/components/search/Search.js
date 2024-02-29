@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./Search.module.scss";
-import { BiSearch } from "react-icons/bi";
+import { BiSearch, BiSort } from "react-icons/bi";
 
-const Search = ({ value, onChange }) => {
+const Search = ({ value, onChange, onFill }) => {
   return (
     <div className={styles.search}>
       <BiSearch size={18} className={styles.icon} />
@@ -12,6 +12,10 @@ const Search = ({ value, onChange }) => {
         value={value}
         onChange={onChange}
       />
+      {/* <button onClick={onFill} className={styles.fillButton}>
+        <BiSort size={18} />
+        Fill
+      </button> */}
     </div>
   );
 };

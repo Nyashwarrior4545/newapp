@@ -28,6 +28,9 @@ const ProductList = ({ products, isLoading }) => {
   const [approvedRequestId, setApprovedRequestId] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [approvedProducts, setApprovedProducts] = useState({});
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" or "desc"
+  
+
 
 
 
@@ -126,6 +129,27 @@ const ProductList = ({ products, isLoading }) => {
       setApprovedProducts(prevState => ({ ...prevState, [id]: 'Completed' }));
     }, 30000); // 30000 milliseconds = 30 seconds
   };
+  const categoryOrder = ["Process Safety", "Environment", "Safety", "Accident", "Complaint", "Loss", "Over £100,000", "Health", "HR", "Expenses", "Overtime", "Holiday"];
+  const handleSortClick = () => {
+    // Toggle between ascending and descending order
+    const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
+    setSortOrder(newSortOrder);
+
+    // Sort the products based on the predefined order of categories
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
+      const categoryAIndex = categoryOrder.indexOf(a.category);
+      const categoryBIndex = categoryOrder.indexOf(b.category);
+
+        return categoryAIndex - categoryBIndex;
+
+    });
+
+    dispatch(FILTER_PRODUCTS({ products: sortedProducts, search }));
+  };
+
+  const [titleDelay, setTitleDelay] = useState(50); // Adjust this value (in milliseconds)
+
+
   
 
   return (
@@ -135,6 +159,11 @@ const ProductList = ({ products, isLoading }) => {
         <div className="--flex-between --flex-dir-column">
           <span>
             <h3>Request Lists</h3>
+          </span>
+          <span>
+            <button  className ="sort"onClick={handleSortClick}>
+              Sort by Category {sortOrder === "asc" ? "↑" : "↓"}
+            </button>
           </span>
           <span>
             <Search
@@ -167,11 +196,43 @@ const ProductList = ({ products, isLoading }) => {
               <tbody>
                 {currentItems.map((product, index) => {
                   const { _id, name, category,status, price, quantity } = product;
+
+                  // Determine the color and tooltip for each category
+                  let color, tooltip;
+                  const categoryIndex = categoryOrder.indexOf(category);
+                  if (categoryIndex < 3) {
+                    color = "red";
+                    tooltip = "Very Important";
+                  } else if (categoryIndex < 6) {
+                    color = "orange";
+                    tooltip = "Important";
+                  } else if (categoryIndex < 9) {
+                    color = "yellow";
+                    tooltip = "Needed";
+                  } else {
+                    color = "green";
+                    tooltip = "Not Needed";
+                  }
                   return (
                     <tr key={_id}>
                       <td>{index + 1}</td>
                       <td>{shortenText(name, 16)}</td>
-                      <td>{category}</td>
+                      <td>
+                        <div
+                          style={{
+                            backgroundColor: color,
+                            width: "12.5px",
+                            height: "12.5px",
+                            borderRadius: "50%",
+                            display: "inline-block",
+                            marginRight: "5px",
+                          }}
+                          title={tooltip}
+                          onMouseEnter={() => setTitleDelay(50)} // Adjust this value (in milliseconds)
+                          onMouseLeave={() => setTitleDelay(100)} // Reset back to the original value
+                        ></div>
+                        {category}
+                      </td>
                       <td>{approvedProducts[_id]}</td>                      <td>
                         {"$"}
                         {price}

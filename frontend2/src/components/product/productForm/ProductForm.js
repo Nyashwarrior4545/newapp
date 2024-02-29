@@ -16,7 +16,8 @@ const ProductForm = ({
   handleInputChange,
   handleImageChange,
   saveProduct,
-  handleSearch, // Add this prop
+  additionalInputValue, // new prop
+  setAdditionalInputValue, // new prop
 
 }) => {
   return (
@@ -118,9 +119,15 @@ const ProductForm = ({
             modules={ProductForm.modules}
             formats={ProductForm.formats}
           />
-          <button type="button" className="--btn --btn-secondary" onClick={handleSearch}>
-              Search User
-            </button>
+
+          <input
+            type="text"
+            placeholder="Search for User"
+            name="additionalInput"
+            value={additionalInputValue}
+            onChange={(e) => setAdditionalInputValue(e.target.value)}
+          />
+
 
           <div className="--my">
             <button type="submit" className="--btn --btn-primary">
