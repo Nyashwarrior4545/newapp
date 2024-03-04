@@ -40,26 +40,26 @@ const Home = () => {
       {/* HERO SECTION */}
       <section className="container hero">
         <div className="hero-text">
-          <h2>Inventory {"&"} Stock Management Solution</h2>
+          <h2>Request {"&"} Process System Solution</h2>
           <p>
-            Inventory system to control and manage proucts in the warehouse in
-            real timeand integrated to make it easier to develop your business.
+          Our request system simplifies tasks by offering easy search and filters, and it smoothly integrates requests from other systems to enhance overall efficiency.
+
           </p>
           <div className="hero-buttons">
             <button className="--btn --btn-secondary">
-              <Link to="/dashboard">Free Trial 1 Month</Link>
+              <Link to="/dashboard">Start Now</Link>
             </button>
           </div>
-          <div className="--flex-start">
+          {/* <div className="--flex-start">
             <NumberText num="14K" text="Brand Owners" />
             <NumberText num="23K" text="Active Users" />
             <NumberText num="500+" text="Partners" />
-          </div>
+          </div> */}
         </div>
-
+{/* 
         <div className="hero-image">
           <img src={heroImg} alt="Inventory" />
-        </div>
+        </div> */}
       </section>
     </div>
   );

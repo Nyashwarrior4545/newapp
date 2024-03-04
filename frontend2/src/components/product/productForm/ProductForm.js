@@ -125,7 +125,6 @@ const ProductForm = ({
             placeholder="Search for User"
             name="additionalInput"
             value={additionalInputValue}
-            onChange={(e) => setAdditionalInputValue(e.target.value)}
           />
 
 

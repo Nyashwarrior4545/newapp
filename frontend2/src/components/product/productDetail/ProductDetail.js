@@ -88,14 +88,11 @@ const ProductDetail = () => {
                 <p>No image set for this request</p>
               )}
             </Card>
-            <h4>Request Availability: {stockStatus(product.quantity)}</h4>
             <hr />
             <h4>
               <span className="badge">Name: </span> &nbsp; {product.name}
             </h4>
-            <p>
-              <b>&rarr; SKU : </b> {product.sku}
-            </p>
+        
             <p>
               <b>&rarr; Category : </b> {product.category}
             </p>
@@ -127,8 +124,6 @@ const ProductDetail = () => {
             <code className="--color-dark">
               Last Updated: {product.updatedAt.toLocaleString("en-US")}
             </code>
-            {/* Button to trigger sending the product list */}
-            <button onClick={sendProductList}>Send Product List</button>
           </div>
         )}
       </Card>

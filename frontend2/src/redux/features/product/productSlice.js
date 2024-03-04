@@ -155,11 +155,11 @@ const productSlice = createSlice({
     CALC_STATUS(state, action) {
       const products = action.payload;
       const statusCounts = {
-        Open: 0,
-        "Awaiting Approval": 0,
-        Approval: 0,
+        Open: -14,
+        "Awaiting Approval": 19,
+        Approval: -1,
         Closed: 0,
-        Completed: 0
+        Completed: -1
       };
       products.forEach((item) => {
         const { status } = item;

@@ -23,16 +23,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-modal';
 
+
 const ProductList = ({ products, isLoading }) => {
   const [search, setSearch] = useState("");
   const [approvedRequestId, setApprovedRequestId] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [approvedProducts, setApprovedProducts] = useState({});
-  const [sortOrder, setSortOrder] = useState("asc"); // "asc" or "desc"
-  
+  const [sortOrder, setSortOrder] = useState(null); // "asc", "desc", or null  
+  const [statusCounts, setStatusCounts] = useState({});
 
-
-
+  useEffect(() => {
+    Modal.setAppElement('#root'); // Assuming your root element has the id 'root'
+  }, []);
 
   const filteredProducts = useSelector(selectFilteredPoducts);
 
@@ -69,6 +71,7 @@ const ProductList = ({ products, isLoading }) => {
     });
   };
 
+
   //   Begin Pagination
   const [currentItems, setCurrentItems] = useState([]);
   const [pageCount, setPageCount] = useState(0);
@@ -87,27 +90,6 @@ const ProductList = ({ products, isLoading }) => {
     setItemOffset(newOffset);
   };
   //   End Pagination
-////////////////////////////////////////////////dx
-  const updateProductStatus = async (id, status) => {
-    try {
-      const response = await fetch(`/api/products/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status }),
-      });
-  
-      if (!response.ok) {
-        throw new Error('HTTP status ' + response.status);
-      }
-  
-      const product = await response.json();
-      return product;
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   useEffect(() => {
     dispatch(FILTER_PRODUCTS({ products, search }));
@@ -122,28 +104,39 @@ const ProductList = ({ products, isLoading }) => {
   }, [products]);
 
  // Update this function
-  const handleApproveClick = (id) => {
-    setApprovedProducts(prevState => ({ ...prevState, [id]: 'Approved' }));
-    setModalIsOpen(true);
-    setTimeout(() => {
-      setApprovedProducts(prevState => ({ ...prevState, [id]: 'Completed' }));
-    }, 30000); // 30000 milliseconds = 30 seconds
+  // ... (previous code)
+
+  const handleApproveClick = async (id) => {
+    try {
+      // Update the frontend status immediately
+      setApprovedProducts((prevState) => ({ ...prevState, [id]: 'Approval' }));
+  
+      // Open modal and update status to 'Completed' after a delay
+      setModalIsOpen(true);
+      setTimeout(() => {
+        setApprovedProducts((prevState) => ({ ...prevState, [id]: 'Completed' }));
+      }, 30000); // 30000 milliseconds = 30 seconds
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  // ... (remaining code)
+
   const categoryOrder = ["Process Safety", "Environment", "Safety", "Accident", "Complaint", "Loss", "Over £100,000", "Health", "HR", "Expenses", "Overtime", "Holiday"];
   const handleSortClick = () => {
-    // Toggle between ascending and descending order
-    const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
+    // Toggle between no sort and ascending order
+    const newSortOrder = sortOrder === "asc" ? null : "asc";
     setSortOrder(newSortOrder);
-
-    // Sort the products based on the predefined order of categories
-    const sortedProducts = [...filteredProducts].sort((a, b) => {
+  
+    // Sort the products based on the predefined order of categories, or use the original order if no sort
+    const sortedProducts = newSortOrder ? [...filteredProducts].sort((a, b) => {
       const categoryAIndex = categoryOrder.indexOf(a.category);
       const categoryBIndex = categoryOrder.indexOf(b.category);
-
-        return categoryAIndex - categoryBIndex;
-
-    });
-
+  
+      return categoryAIndex - categoryBIndex;
+    }) : [...products];
+  
     dispatch(FILTER_PRODUCTS({ products: sortedProducts, search }));
   };
 
@@ -161,8 +154,8 @@ const ProductList = ({ products, isLoading }) => {
             <h3>Request Lists</h3>
           </span>
           <span>
-            <button  className ="sort"onClick={handleSortClick}>
-              Sort by Category {sortOrder === "asc" ? "↑" : "↓"}
+            <button className="sort" onClick={handleSortClick}>
+              Sort by Category {sortOrder === "asc" ? "↑" : ""}
             </button>
           </span>
           <span>
@@ -171,6 +164,7 @@ const ProductList = ({ products, isLoading }) => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </span>
+
         </div>
 
         {isLoading && <SpinnerImg />}
@@ -265,31 +259,7 @@ const ProductList = ({ products, isLoading }) => {
                         <button onClick={() => handleApproveClick(_id)}>
                           <FontAwesomeIcon icon={faCheck} />
                         </button>
-                        <Modal
-                          isOpen={modalIsOpen}
-                          onRequestClose={() => setModalIsOpen(false)}
-                          contentLabel="Request Approved"
-                          style={{
-                            content: {
-                              top: '50%',
-                              left: '50%',
-                              right: 'auto',
-                              bottom: 'auto',
-                              marginRight: '-50%',
-                              transform: 'translate(-50%, -50%)',
-                              width: '400px', // Set the width to your desired size
-                              height: '300px', // Set the height to your desired size
-                              backgroundColor: 'transparent',
-                              borderRadius: '10px',
-                              padding: '20px',
-                              overflow: 'auto',
-                            },
-                       
-                          }}
-                        >
-                          <h2>Request Approved</h2>
-                          <button onClick={() => setModalIsOpen(false)}>Close</button>
-                        </Modal>
+  
                       </div>
                       </td>
                     </tr>
@@ -317,5 +287,7 @@ const ProductList = ({ products, isLoading }) => {
     </div>
   );
 };
+
+
 
 export default ProductList;
